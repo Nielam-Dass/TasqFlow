@@ -3,6 +3,7 @@ import { createBrowserRouter, Outlet, RouterProvider } from "react-router"
 import SequencePage from "./pages/sequence/SequencePage"
 import ProcessPage from "./pages/process/ProcessPage"
 
+
 const browserRouter = createBrowserRouter([
   {
     path: "/",
