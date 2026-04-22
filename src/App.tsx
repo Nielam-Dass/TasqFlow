@@ -2,6 +2,7 @@ import type { JSX } from "react"
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router"
 import SequencePage from "./pages/sequence/SequencePage"
 import ProcessPage from "./pages/process/ProcessPage"
+import TasqUserDataProvider from "./components/TasqUserData"
 
 
 const browserRouter = createBrowserRouter([
@@ -33,7 +34,9 @@ const browserRouter = createBrowserRouter([
 function AppLayout(): JSX.Element {
   return (
     <>
-      <Outlet/>
+      <TasqUserDataProvider>
+        <Outlet/>
+      </TasqUserDataProvider>
     </>
   )
 }
@@ -44,7 +47,6 @@ function AppLayout(): JSX.Element {
  * @returns JSX element for the App component
  */
 function App(): JSX.Element {
-
   return (
     <>
       <h1>TasqFlow</h1>
