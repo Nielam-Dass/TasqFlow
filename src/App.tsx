@@ -3,6 +3,7 @@ import { createBrowserRouter, Outlet, RouterProvider } from "react-router"
 import SequencePage from "./pages/sequence/SequencePage"
 import ProcessPage from "./pages/process/ProcessPage"
 import TasqUserDataProvider from "./components/TasqUserData"
+import HomePage from "./pages/home/HomePage"
 
 
 const browserRouter = createBrowserRouter([
@@ -12,7 +13,7 @@ const browserRouter = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <div>Index Page</div>
+        Component: HomePage
       },
       {
         path: "/sequence/:seqId",
