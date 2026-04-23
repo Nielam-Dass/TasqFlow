@@ -9,7 +9,7 @@ import { useTasqUserData } from "../../components/TasqUserData"
  */
 function SequencePage(): JSX.Element {
   const { seqId } = useParams<"seqId">() as { seqId: string }
-  const tasqUserData = useTasqUserData()
+  const [tasqUserData, _] = useTasqUserData()
 
   return (
     <>
