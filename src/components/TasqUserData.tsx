@@ -1,13 +1,24 @@
-import { createContext, useContext, useReducer, type JSX, type PropsWithChildren } from "react"
+import { createContext, useContext, useEffect, useReducer, type JSX, type PropsWithChildren } from "react"
 import type UserData from "../types/UserData"
 import type Process from "../types/Process";
 
-
-type Action = {
-  actionType: string;
-  payload: unknown;
+/**
+ * Gets user data from local storage
+ * @param defaultData User data object to return if local storage is empty
+ * @returns Current user data state
+ */
+const getSavedUserData = (defaultData: UserData): UserData => {
+  const userDataJson = localStorage.getItem("tasq-user-data")
+  if (userDataJson) return JSON.parse(userDataJson)
+  return defaultData
 }
 
+/**
+ * Typeguard function to determine if payload is a Process object
+ * 
+ * @param payload Uknown value to check
+ * @returns Boolean depending on if payload is a Process
+ */
 const isProcessType = (payload: unknown): payload is Process => {
   return (
     typeof payload === "object" && 
@@ -19,6 +30,18 @@ const isProcessType = (payload: unknown): payload is Process => {
   )
 }
 
+type Action = {
+  actionType: string;
+  payload: unknown;
+}
+
+/**
+ * Makes changes to user data based on specified action
+ * 
+ * @param state User data state
+ * @param action Action to perform on state
+ * @returns Updated user data state after action is performed
+ */
 const reducer = (state: UserData, action: Action): UserData => {
   switch (action.actionType) {
     case "NEW-PROCESS":
@@ -43,8 +66,15 @@ const reducer = (state: UserData, action: Action): UserData => {
 type TasqUserDataProviderValue = [ UserData, (a: Action)=>void ]
 const TasqUserDataContext = createContext<TasqUserDataProviderValue | null>(null)
 
-function TasqUserDataProvider({ children }: PropsWithChildren): JSX.Element {
-  const [userDataState, userDataDispatch] = useReducer<UserData, [Action]>(reducer, {
+/**
+ * Provider component to share user data and action dispatch function with child elements
+ * 
+ * @param props Component props
+ * @param props.children Child elements that access the context value
+ * @returns JSX element for the user data provider component
+ */
+export default function TasqUserDataProvider({ children }: PropsWithChildren): JSX.Element {
+  const [userDataState, userDataDispatch] = useReducer(reducer, {
     sequences: {
       "AAA": {
         sequenceId: "AAA", 
@@ -57,7 +87,7 @@ function TasqUserDataProvider({ children }: PropsWithChildren): JSX.Element {
         ]}
     }, 
     processes: {}
-  })
+  }, getSavedUserData)
   return (
     <TasqUserDataContext value={[userDataState, userDataDispatch]}>
       { children }
@@ -65,12 +95,19 @@ function TasqUserDataProvider({ children }: PropsWithChildren): JSX.Element {
   )
 }
 
+/**
+ * Hook to get user data and a dispatch function from TasqUserDataProvider
+ * 
+ * @returns User data and a dispatch function, which can update the user data
+ */
 export function useTasqUserData(): TasqUserDataProviderValue {
   const context = useContext(TasqUserDataContext)
-  if (!context) {
-    throw new Error("useTaqUserData must be used within a TasqUserDataProvider")
-  }
+  if (!context) throw new Error("useTaqUserData must be used within a TasqUserDataProvider")
+
+  const userData: UserData = context[0]
+  useEffect(() => {
+    localStorage.setItem("tasq-user-data", JSON.stringify(userData))
+  }, [userData])
+  
   return context
 }
-
-export default TasqUserDataProvider
