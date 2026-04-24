@@ -1,13 +1,43 @@
 import { createContext, useContext, useReducer, type JSX, type PropsWithChildren } from "react"
 import type UserData from "../types/UserData"
+import type Process from "../types/Process";
 
 
 type Action = {
   actionType: string;
   payload: unknown;
 }
+
+const isProcessType = (payload: unknown): payload is Process => {
+  return (
+    typeof payload === "object" && 
+    payload !== null && 
+    "processId" in payload &&
+    "processName" in payload &&
+    "parentSequenceId" in payload &&
+    "currentTaskIndex" in payload
+  )
+}
+
 const reducer = (state: UserData, action: Action): UserData => {
-  return state
+  switch (action.actionType) {
+    case "NEW-PROCESS":
+      if (isProcessType(action.payload)) {
+        const newProcess: Process = action.payload
+        return {
+          ...state, 
+          processes: {
+            ...state.processes, 
+            [newProcess.processId]: newProcess
+          }
+        }
+      }
+      else {
+        throw new Error("NEW-PROCESS actionType requires payload object of type Process")
+      }
+    default:
+      return state
+  }
 }
 
 type TasqUserDataProviderValue = [ UserData, (a: Action)=>void ]
