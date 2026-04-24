@@ -1,6 +1,7 @@
 import type { JSX } from "react"
 import { useParams } from "react-router"
 import { useTasqUserData } from "../../components/TasqUserData"
+import type Task from "../../types/Task"
 
 /**
  * Component to display sequence of tasks
@@ -15,7 +16,12 @@ function SequencePage(): JSX.Element {
     <>
       <div>Sequence ID: {seqId}</div>
       <div>Sequence Name: {tasqUserData.sequences[seqId].sequenceName}</div>
-      <div>Number of tasks: {tasqUserData.sequences[seqId].tasks.length}</div>
+      <div>Tasks:</div>
+      <ul>
+        {tasqUserData.sequences[seqId].tasks.map((t: Task) => {
+          return <li>{t.taskName}</li>
+        })}
+      </ul>
     </>
   )
 }
