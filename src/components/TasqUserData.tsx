@@ -44,6 +44,20 @@ type Action = {
  */
 const reducer = (state: UserData, action: Action): UserData => {
   switch (action.actionType) {
+    case "UPDATE-PROCESS":
+      if (isProcessType(action.payload) && state.processes[action.payload.processId]) {
+        const updatedProcess: Process = action.payload
+        return {
+          ...state, 
+          processes: {
+            ...state.processes, 
+            [updatedProcess.processId]: updatedProcess
+          }
+        }
+      }
+      else {
+        throw new Error("UPDATE-PROCESS actionType requires payload of type Process with existing processId")
+      }
     case "NEW-PROCESS":
       if (isProcessType(action.payload)) {
         const newProcess: Process = action.payload

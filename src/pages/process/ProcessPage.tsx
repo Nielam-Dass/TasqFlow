@@ -10,7 +10,7 @@ import type Process from "../../types/Process"
  */
 function ProcessPage(): JSX.Element {
   const { procId } = useParams<"procId">() as { procId: string }
-  const [userData, _] = useTasqUserData()
+  const [userData, dispatch] = useTasqUserData()
   const process: Process = userData.processes[procId]
 
   return (
@@ -18,6 +18,8 @@ function ProcessPage(): JSX.Element {
       <div>Process ID: {procId}</div>
       <div>Process Name: {process.processName}</div>
       <div>Current task: {userData.sequences[process.parentSequenceId].tasks[process.currentTaskIndex].taskName}</div>
+      <button onClick={() => dispatch({actionType: "UPDATE-PROCESS", payload: {...process, currentTaskIndex: process.currentTaskIndex + 1}})}>Next</button>
+      <button onClick={() => dispatch({actionType: "UPDATE-PROCESS", payload: {...process, currentTaskIndex: process.currentTaskIndex - 1}})}>Previous</button>
     </>
   )
 }
