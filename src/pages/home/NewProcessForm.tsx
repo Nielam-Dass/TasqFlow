@@ -29,12 +29,12 @@ function NewProcessForm({ onCreate }: { onCreate(p: Process): void }) {
   
   return (
     <>
-      <label>Process Name: </label>
-      <input type="text" ref={procNameRef}/><br/>
-      <label>Sequence ID: </label>
-      <input type="text" ref={procSeqIdRef}/><br/>
-      <label>Starting Task Index: </label>
-      <input type="number" ref={procTaskIdx}/><br/>
+      <label htmlFor="proc-name">Process Name: </label>
+      <input type="text" id="proc-name" ref={procNameRef}/><br/>
+      <label htmlFor="proc-seq-id">Sequence ID: </label>
+      <input type="text" id="proc-seq-id" ref={procSeqIdRef}/><br/>
+      <label htmlFor="proc-task-index">Starting Task Index: </label>
+      <input type="number" id="proc-task-index" ref={procTaskIdx}/><br/>
       <button onClick={handleCreate}>Create</button>
     </>
   )

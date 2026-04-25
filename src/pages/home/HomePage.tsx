@@ -23,10 +23,10 @@ function HomePage(): JSX.Element {
         <NewProcessForm onCreate={(p: Process) => dispatch({ actionType: "NEW-PROCESS", payload: p})}/>
       </div>
       <div>
-        <h3>Processes:</h3>
+        <h3>Your Processes:</h3>
         {
           Object.entries(tasqUserData.processes).length &&
-          Object.entries(tasqUserData.processes).map(([procId, proc]): JSX.Element => <Link key={procId} to={`/process/${procId}`}>{proc.processName}</Link>) ||
+          Object.entries(tasqUserData.processes).map(([procId, proc]): JSX.Element => <div key={procId}><Link to={`/process/${procId}`}>{proc.processName}</Link></div>) ||
           <div>No processes</div>
         }
       </div>
@@ -35,10 +35,10 @@ function HomePage(): JSX.Element {
         <NewSequenceForm onCreate={(s: Sequence) => dispatch({ actionType: "NEW-SEQUENCE", payload: s})}/>
       </div>
       <div>
-        <h3>Sequences:</h3>
+        <h3>Your Sequences:</h3>
         {
           Object.entries(tasqUserData.sequences).length &&
-          Object.entries(tasqUserData.sequences).map(([seqId, seq]): JSX.Element => <Link key={seqId} to={`/sequence/${seqId}`}>{seq.sequenceName}</Link>) ||
+          Object.entries(tasqUserData.sequences).map(([seqId, seq]): JSX.Element => <div key={seqId}><Link to={`/sequence/${seqId}`}>{seq.sequenceName}</Link></div>) ||
           <div>No sequences</div>
         }
       </div>

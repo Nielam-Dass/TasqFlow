@@ -46,7 +46,8 @@ function NewSequenceForm({ onCreate }: { onCreate(s: Sequence): void }) {
     <>
       <label htmlFor="new-seq-name">Sequence Name: </label>
       <input type="text" id="new-seq-name" ref={seqNameRef}/><br />
-      <input type="file" ref={fileRef}/><br />
+      <label htmlFor="task-file">Task CSV File: </label>
+      <input type="file" id="task-file" ref={fileRef}/><br />
       <button onClick={handleCreate}>Create</button>
     </>
   )

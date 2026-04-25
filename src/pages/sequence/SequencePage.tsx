@@ -14,14 +14,15 @@ function SequencePage(): JSX.Element {
 
   return (
     <>
+      <h2>Sequence Details</h2>
       <div>Sequence ID: {seqId}</div>
       <div>Sequence Name: {tasqUserData.sequences[seqId].sequenceName}</div>
       <div>Tasks:</div>
-      <ul>
+      <ol>
         {tasqUserData.sequences[seqId].tasks.map((t: Task) => {
-          return <li>{t.taskName}</li>
+          return <li key={t.taskId}>{t.taskName} {t.isOptional && "(Optional)"}</li>
         })}
-      </ul>
+      </ol>
     </>
   )
 }
