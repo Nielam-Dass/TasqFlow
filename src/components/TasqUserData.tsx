@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useReducer, type JSX, type PropsWithChildren } from "react"
 import type UserData from "../types/UserData"
 import type Process from "../types/Process";
+import type Sequence from "../types/Sequence";
 
 /**
  * Gets user data from local storage
@@ -30,6 +31,16 @@ const isProcessType = (payload: unknown): payload is Process => {
   )
 }
 
+const isSequenceType = (payload: unknown): payload is Sequence => {
+  return (
+    typeof payload === "object" && 
+    payload !== null && 
+    "sequenceId" in payload &&
+    "sequenceName" in payload &&
+    "tasks" in payload
+  )
+}
+
 type Action = {
   actionType: string;
   payload: unknown;
@@ -44,6 +55,20 @@ type Action = {
  */
 const reducer = (state: UserData, action: Action): UserData => {
   switch (action.actionType) {
+    case "NEW-SEQUENCE":
+      if (isSequenceType(action.payload)) {
+        const newSequence: Sequence = action.payload
+        return {
+          ...state,
+          sequences: {
+            ...state.sequences,
+            [newSequence.sequenceId]: newSequence
+          }
+        }
+      }
+      else {
+        throw new Error("NEW-SEQUENCE actionType requires payload object of type Sequence")
+      }
     case "UPDATE-PROCESS":
       if (isProcessType(action.payload) && state.processes[action.payload.processId]) {
         const updatedProcess: Process = action.payload
@@ -88,20 +113,7 @@ const TasqUserDataContext = createContext<TasqUserDataProviderValue | null>(null
  * @returns JSX element for the user data provider component
  */
 export default function TasqUserDataProvider({ children }: PropsWithChildren): JSX.Element {
-  const [userDataState, userDataDispatch] = useReducer(reducer, {
-    sequences: {
-      "AAA": {
-        sequenceId: "AAA", 
-        sequenceName: "Seq A", 
-        tasks: [
-          {taskId: "t1", taskName: "Task 1", isOptional: false},
-          {taskId: "t2", taskName: "Task 2", isOptional: false},
-          {taskId: "t3", taskName: "Task 3", isOptional: true},
-          {taskId: "t4", taskName: "Task 4", isOptional: false},
-        ]}
-    }, 
-    processes: {}
-  }, getSavedUserData)
+  const [userDataState, userDataDispatch] = useReducer(reducer, {sequences: {}, processes: {}}, getSavedUserData)
   return (
     <TasqUserDataContext value={[userDataState, userDataDispatch]}>
       { children }

@@ -3,6 +3,8 @@ import { useTasqUserData } from "../../components/TasqUserData"
 import { Link } from "react-router"
 import NewProcessForm from "./NewProcessForm"
 import type Process from "../../types/Process"
+import NewSequenceForm from "./NewSequenceForm"
+import type Sequence from "../../types/Sequence"
 
 
 /**
@@ -27,6 +29,10 @@ function HomePage(): JSX.Element {
           Object.entries(tasqUserData.processes).map(([procId, proc]): JSX.Element => <Link key={procId} to={`/process/${procId}`}>{proc.processName}</Link>) ||
           <div>No processes</div>
         }
+      </div>
+      <div>
+        <h3>New Sequence:</h3>
+        <NewSequenceForm onCreate={(s: Sequence) => dispatch({ actionType: "NEW-SEQUENCE", payload: s})}/>
       </div>
       <div>
         <h3>Sequences:</h3>
