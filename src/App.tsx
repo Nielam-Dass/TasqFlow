@@ -4,6 +4,8 @@ import SequencePage from "./pages/sequence/SequencePage"
 import ProcessPage from "./pages/process/ProcessPage"
 import TasqUserDataProvider from "./components/TasqUserData"
 import HomePage from "./pages/home/HomePage"
+import { AppBar, createTheme, ThemeProvider, Toolbar, Typography } from "@mui/material"
+import { teal } from "@mui/material/colors"
 
 
 const browserRouter = createBrowserRouter([
@@ -27,6 +29,12 @@ const browserRouter = createBrowserRouter([
   }
 ])
 
+const theme = createTheme({
+  palette: {
+    primary: teal
+  }
+})
+
 /**
  * Defines app layout
  * 
@@ -35,9 +43,19 @@ const browserRouter = createBrowserRouter([
 function AppLayout(): JSX.Element {
   return (
     <>
-      <TasqUserDataProvider>
-        <Outlet/>
-      </TasqUserDataProvider>
+      <ThemeProvider theme={theme}>
+        <AppBar>
+          <Toolbar sx={{p: 1}}>
+            <Typography variant="h2" sx={{flexGrow: 1}}>TasqFlow</Typography>
+            <Typography variant="h4">Developed by Niel</Typography>
+          </Toolbar>
+        </AppBar>
+        <Toolbar sx={{p: 1}}/>
+        
+        <TasqUserDataProvider>
+          <Outlet/>
+        </TasqUserDataProvider>
+      </ThemeProvider>
     </>
   )
 }
@@ -50,7 +68,6 @@ function AppLayout(): JSX.Element {
 function App(): JSX.Element {
   return (
     <>
-      <h1>TasqFlow</h1>
       <RouterProvider router={browserRouter} />
     </>
   )
