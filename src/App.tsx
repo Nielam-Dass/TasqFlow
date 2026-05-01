@@ -32,6 +32,9 @@ const browserRouter = createBrowserRouter([
 const theme = createTheme({
   palette: {
     primary: teal
+  },
+  typography: {
+    fontFamily: "Arial"
   }
 })
 

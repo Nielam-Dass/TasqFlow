@@ -1,6 +1,7 @@
-import { useRef } from "react"
 import {v4 as uuidv4} from "uuid"
 import type Process from "../../types/Process"
+import { Controller, useForm, type SubmitHandler } from "react-hook-form"
+import { Box, Button, TextField } from "@mui/material"
 
 
 /**
@@ -11,32 +12,48 @@ import type Process from "../../types/Process"
  * @returns JSX element for a form to add a new process
  */
 function NewProcessForm({ onCreate }: { onCreate(p: Process): void }) {
-  const procNameRef = useRef<HTMLInputElement>(null)
-  const procSeqIdRef = useRef<HTMLInputElement>(null)
-  const procTaskIdx = useRef<HTMLInputElement>(null)
 
-  const handleCreate: React.MouseEventHandler<HTMLButtonElement> = (): void => {
-    if(procNameRef.current && procSeqIdRef.current && procTaskIdx.current) {
-      const newProcess: Process = {
+  const handleCreate: SubmitHandler<FormValues> = (data: FormValues): void => {
+    const newProcess: Process = {
         processId: uuidv4(),
-        processName: procNameRef.current.value, 
-        parentSequenceId: procSeqIdRef.current.value, 
-        currentTaskIndex: Number.parseInt(procTaskIdx.current.value)
+        processName: data.procName, 
+        parentSequenceId: data.procSeqId, 
+        currentTaskIndex: Number.parseInt(data.procTaskIndex)
       }
       onCreate(newProcess)
-    }
   }
+
+  type FormValues = {
+    procName: string,
+    procSeqId: string,
+    procTaskIndex: string
+  }
+
+  const { handleSubmit, control } = useForm<FormValues>({
+    defaultValues: {
+      procName: "",
+      procSeqId: "",
+      procTaskIndex: ""
+    }
+  })
   
   return (
-    <>
-      <label htmlFor="proc-name">Process Name: </label>
-      <input type="text" id="proc-name" ref={procNameRef}/><br/>
-      <label htmlFor="proc-seq-id">Sequence ID: </label>
-      <input type="text" id="proc-seq-id" ref={procSeqIdRef}/><br/>
-      <label htmlFor="proc-task-index">Starting Task Index: </label>
-      <input type="number" id="proc-task-index" ref={procTaskIdx}/><br/>
-      <button onClick={handleCreate}>Create</button>
-    </>
+    
+    <form onSubmit={handleSubmit(handleCreate)}>
+      <Box sx={{display: "flex", flexDirection: "column", gap: 1, width: 400}}>
+        <Controller control={control} name="procName" render={({ field }) => (
+          <TextField  {...field} label="Process Name" />
+        )} />
+        <Controller control={control} name="procSeqId" render={({ field }) => (
+          <TextField  {...field} label="Sequence ID" />
+        )} />
+        <Controller control={control} name="procTaskIndex" render={({ field }) => (
+          <TextField  {...field} label="Starting Task Index" />
+        )} />
+        <Button type="submit" variant="contained">Create</Button>
+      </Box>
+    </form>
+    
   )
 }
 
