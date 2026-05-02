@@ -1,8 +1,9 @@
-import { useRef } from "react"
 import type Sequence from "../../types/Sequence"
 import Papa from "papaparse"
 import type Task from "../../types/Task"
 import {v4 as uuidv4} from "uuid"
+import { Controller, useForm, type SubmitHandler } from "react-hook-form"
+import { Box, Button, TextField, Typography } from "@mui/material"
 
 
 /**
@@ -13,43 +14,59 @@ import {v4 as uuidv4} from "uuid"
  * @returns JSX element for the form to add a new sequence
  */
 function NewSequenceForm({ onCreate }: { onCreate(s: Sequence): void }) {
-  const fileRef = useRef<HTMLInputElement>(null)
-  const seqNameRef = useRef<HTMLInputElement>(null)
+  type FormValues = {
+    seqName: string;
+    taskFile: FileList | null;
+  }
 
-  const handleCreate: React.MouseEventHandler<HTMLButtonElement> = () => {
-    if (seqNameRef.current && fileRef.current && fileRef.current.files) {
-      const seqNameVal: string = seqNameRef.current.value
-      const file = fileRef.current.files[0]
+  const { handleSubmit, control, register, watch } = useForm<FormValues>({
+    defaultValues: {
+      seqName: "",
+      taskFile: null
+    }
+  })
+
+  const taskFile = watch("taskFile")
+
+  const handleCreate: SubmitHandler<FormValues> = (data: FormValues): void => {
       const reader = new FileReader()
 
       reader.onload = () => {
         const fileContent: string = reader.result as string
-        const fileData = Papa.parse<string>(fileContent).data
-        const taskList: Task[] = fileData.map((row: string): Task => {
+        const fileData: string[][] = Papa.parse<string[]>(fileContent).data
+        const taskList: Task[] = fileData.map((row: string[]): Task => {
           return {
             taskId: uuidv4(), 
             taskName: row[0],
             isOptional: row[1]==="0"
-          } 
+          }
         })
         const newSequence: Sequence = {
           sequenceId: uuidv4(),
-          sequenceName: seqNameVal,
+          sequenceName: data.seqName,
           tasks: taskList
         }
         onCreate(newSequence)
       }
-      reader.readAsText(file)
-    }
+
+      data.taskFile && reader.readAsText(data.taskFile[0])
   }
+
   return (
-    <>
-      <label htmlFor="new-seq-name">Sequence Name: </label>
-      <input type="text" id="new-seq-name" ref={seqNameRef}/><br />
-      <label htmlFor="task-file">Task CSV File: </label>
-      <input type="file" id="task-file" ref={fileRef}/><br />
-      <button onClick={handleCreate}>Create</button>
-    </>
+    <form onSubmit={handleSubmit(handleCreate)}>
+      <Box sx={{display: "flex", flexDirection: "column", gap: 1, width: 400}}>
+        <Controller control={control} name="seqName" render={({ field }) => (
+          <TextField  {...field} label="Sequence Name" />
+        )} />
+        <Button component="label" variant="outlined">
+          Upload Task CSV File
+          <input type="file" accept=".csv" style={{display: "none"}} {...register("taskFile")} />
+        </Button>
+        <Typography sx={{textAlign: "center"}}>{taskFile && taskFile[0].name || "No file chosen"}</Typography>
+        <Button type="submit" variant="contained">Create</Button>
+      </Box>
+    </form>
+    
   )
 }
 
