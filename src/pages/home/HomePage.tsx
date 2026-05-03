@@ -1,11 +1,12 @@
 import type { JSX } from "react"
 import { useTasqUserData } from "../../components/TasqUserData"
-import { Link } from "react-router"
 import NewProcessForm from "./NewProcessForm"
 import type Process from "../../types/Process"
 import NewSequenceForm from "./NewSequenceForm"
 import type Sequence from "../../types/Sequence"
 import { Box, Typography } from "@mui/material"
+import ProcessCard from "./ProcessCard"
+import SequenceCard from "./SequenceCard"
 
 
 /**
@@ -27,7 +28,9 @@ function HomePage(): JSX.Element {
         <Typography variant="h5">Your Processes:</Typography>
         {
           Object.entries(tasqUserData.processes).length &&
-          Object.entries(tasqUserData.processes).map(([procId, proc]): JSX.Element => <div key={procId}><Link to={`/process/${procId}`}>{proc.processName}</Link></div>) ||
+          <Box sx={{display: "flex", gap: 2, flexWrap: "wrap"}}>
+            {Object.entries(tasqUserData.processes).map(([procId, proc]): JSX.Element => <ProcessCard key={procId} process={proc}/>)}
+          </Box> ||
           <div>No processes</div>
         }
       </Box>
@@ -39,7 +42,9 @@ function HomePage(): JSX.Element {
         <Typography variant="h5">Your Sequences:</Typography>
         {
           Object.entries(tasqUserData.sequences).length &&
-          Object.entries(tasqUserData.sequences).map(([seqId, seq]): JSX.Element => <div key={seqId}><Link to={`/sequence/${seqId}`}>{seq.sequenceName}</Link></div>) ||
+          <Box sx={{display: "flex", gap: 2, flexWrap: "wrap"}}>
+            {Object.entries(tasqUserData.sequences).map(([seqId, seq]): JSX.Element => <SequenceCard key={seqId} sequence={seq}/>)}
+          </Box> ||
           <div>No sequences</div>
         }
       </Box>

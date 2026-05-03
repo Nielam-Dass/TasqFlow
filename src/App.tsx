@@ -1,5 +1,5 @@
 import type { JSX } from "react"
-import { createBrowserRouter, Outlet, RouterProvider } from "react-router"
+import { createBrowserRouter, Outlet, RouterProvider, ScrollRestoration } from "react-router"
 import SequencePage from "./pages/sequence/SequencePage"
 import ProcessPage from "./pages/process/ProcessPage"
 import TasqUserDataProvider from "./components/TasqUserData"
@@ -46,6 +46,7 @@ const theme = createTheme({
 function AppLayout(): JSX.Element {
   return (
     <>
+      <ScrollRestoration/>
       <ThemeProvider theme={theme}>
         <AppBar>
           <Toolbar sx={{p: 1}}>
