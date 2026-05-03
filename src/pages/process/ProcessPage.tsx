@@ -1,8 +1,9 @@
 import type { JSX } from "react"
-import { useParams } from "react-router"
+import { useNavigate, useParams } from "react-router"
 import { useTasqUserData } from "../../components/TasqUserData"
 import type Process from "../../types/Process"
 import type Task from "../../types/Task"
+import { Button } from "@mui/material"
 
 /**
  * Component to display process information
@@ -15,8 +16,11 @@ function ProcessPage(): JSX.Element {
   const process: Process = userData.processes[procId]
   const currTask: Task = userData.sequences[process.parentSequenceId].tasks[process.currentTaskIndex]
 
+  const navigate = useNavigate()
+
   return (
     <>
+      <Button onClick={() => navigate("/")}>&lt;&lt; Back to dashboard</Button>
       <h2>Process Details</h2>
       <div>Process ID: {procId}</div>
       <div>Process Name: {process.processName}</div>

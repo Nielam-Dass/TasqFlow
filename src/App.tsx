@@ -54,7 +54,7 @@ function AppLayout(): JSX.Element {
             <Typography variant="h4">Developed by Niel</Typography>
           </Toolbar>
         </AppBar>
-        <Toolbar sx={{p: 1}}/>
+        <Toolbar sx={{p: 1, mb: 2}}/>
         
         <TasqUserDataProvider>
           <Outlet/>

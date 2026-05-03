@@ -1,7 +1,8 @@
 import type { JSX } from "react"
-import { useParams } from "react-router"
+import { useNavigate, useParams } from "react-router"
 import { useTasqUserData } from "../../components/TasqUserData"
 import type Task from "../../types/Task"
+import { Button } from "@mui/material"
 
 /**
  * Component to display sequence of tasks
@@ -12,8 +13,11 @@ function SequencePage(): JSX.Element {
   const { seqId } = useParams<"seqId">() as { seqId: string }
   const [tasqUserData, _] = useTasqUserData()
 
+  const navigate = useNavigate()
+
   return (
     <>
+      <Button onClick={() => navigate("/")}>&lt;&lt; Back to dashboard</Button>
       <h2>Sequence Details</h2>
       <div>Sequence ID: {seqId}</div>
       <div>Sequence Name: {tasqUserData.sequences[seqId].sequenceName}</div>
