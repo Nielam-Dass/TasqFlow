@@ -13,10 +13,16 @@ import { Button } from "@mui/material"
 function ProcessPage(): JSX.Element {
   const { procId } = useParams<"procId">() as { procId: string }
   const [userData, dispatch] = useTasqUserData()
+  const navigate = useNavigate()
+
   const process: Process = userData.processes[procId]
+  if (!process) return <></>
   const currTask: Task = userData.sequences[process.parentSequenceId].tasks[process.currentTaskIndex]
 
-  const navigate = useNavigate()
+  const handleDelete = (processId: string): void => {
+    navigate("/")
+    dispatch({actionType: "DELETE-PROCESS", payload: processId})
+  }
 
   return (
     <>
@@ -26,7 +32,8 @@ function ProcessPage(): JSX.Element {
       <div>Process Name: {process.processName}</div>
       <div>Current task: {currTask.taskName} {currTask.isOptional && "(Optional)"}</div>
       <button onClick={() => dispatch({actionType: "UPDATE-PROCESS", payload: {...process, currentTaskIndex: process.currentTaskIndex - 1}})}>Previous</button>
-      <button onClick={() => dispatch({actionType: "UPDATE-PROCESS", payload: {...process, currentTaskIndex: process.currentTaskIndex + 1}})}>Next</button>
+      <button onClick={() => dispatch({actionType: "UPDATE-PROCESS", payload: {...process, currentTaskIndex: process.currentTaskIndex + 1}})}>Next</button><br />
+      <button onClick={() => handleDelete(process.processId)}>Delete</button>
     </>
   )
 }

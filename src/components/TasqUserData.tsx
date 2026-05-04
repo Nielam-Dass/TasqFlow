@@ -97,6 +97,16 @@ const reducer = (state: UserData, action: Action): UserData => {
       else {
         throw new Error("NEW-PROCESS actionType requires payload object of type Process")
       }
+    case "DELETE-PROCESS":
+      if (typeof action.payload === "string") {
+        return {
+          ...state,
+          processes: Object.fromEntries(Object.entries(state.processes).filter(([pid, _]): Boolean => pid !== action.payload))
+        }
+      }
+      else {
+        throw new Error("DELETE-PROCESS actionType requires string payload with target processId")
+      }
     default:
       return state
   }
