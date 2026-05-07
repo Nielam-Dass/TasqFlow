@@ -4,8 +4,9 @@ import SequencePage from "./pages/sequence/SequencePage"
 import ProcessPage from "./pages/process/ProcessPage"
 import TasqUserDataProvider from "./components/TasqUserData"
 import HomePage from "./pages/home/HomePage"
-import { AppBar, createTheme, ThemeProvider, Toolbar, Typography } from "@mui/material"
+import { createTheme, ThemeProvider } from "@mui/material"
 import { teal } from "@mui/material/colors"
+import MainAppBar from "./components/MainAppBar"
 
 
 const browserRouter = createBrowserRouter([
@@ -48,14 +49,7 @@ function AppLayout(): JSX.Element {
     <>
       <ScrollRestoration/>
       <ThemeProvider theme={theme}>
-        <AppBar>
-          <Toolbar sx={{p: 1}}>
-            <Typography variant="h2" sx={{flexGrow: 1}}>TasqFlow</Typography>
-            <Typography variant="h4">Developed by Niel</Typography>
-          </Toolbar>
-        </AppBar>
-        <Toolbar sx={{p: 1, mb: 2}}/>
-        
+        <MainAppBar/>
         <TasqUserDataProvider>
           <Outlet/>
         </TasqUserDataProvider>
