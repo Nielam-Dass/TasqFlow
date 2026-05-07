@@ -1,12 +1,13 @@
-import type { JSX } from "react"
+import { useState, type JSX } from "react"
 import { useTasqUserData } from "../../components/TasqUserData"
 import NewProcessForm from "./NewProcessForm"
 import type Process from "../../types/Process"
 import NewSequenceForm from "./NewSequenceForm"
 import type Sequence from "../../types/Sequence"
-import { Box, Typography } from "@mui/material"
+import { Box, Button, Typography } from "@mui/material"
 import ProcessCard from "./ProcessCard"
 import SequenceCard from "./SequenceCard"
+import CenteredModal from "../../components/CenteredModal"
 
 
 /**
@@ -16,16 +17,24 @@ import SequenceCard from "./SequenceCard"
  */
 function HomePage(): JSX.Element {
   const [tasqUserData, dispatch] = useTasqUserData()
+  const [newProcessFormOpen, setNewProcessFormOpen] = useState(false)
+
+  const handleNewProcessFormOpen = () => setNewProcessFormOpen(true)
+  const handleNewProcessFormClose = () => setNewProcessFormOpen(false)
 
   return (
     <>
       <Typography variant="h3" sx={{my: 2}}>Main Dashboard</Typography>
+      
+      <CenteredModal open={newProcessFormOpen} onClose={handleNewProcessFormClose}>
+        <Typography variant="h5" sx={{mb: 2}}>New Process</Typography>
+        <NewProcessForm onCreate={(p: Process) => {
+          dispatch({ actionType: "NEW-PROCESS", payload: p })
+          handleNewProcessFormClose()
+        }}/>
+      </CenteredModal>
       <Box sx={{mt: 2}}>
-        <Typography variant="h5">New Process:</Typography>
-        <NewProcessForm onCreate={(p: Process) => dispatch({ actionType: "NEW-PROCESS", payload: p})}/>
-      </Box>
-      <Box sx={{mt: 2}}>
-        <Typography variant="h5">Your Processes:</Typography>
+        <Typography variant="h5">Processes:</Typography>
         {
           Object.entries(tasqUserData.processes).length &&
           <Box sx={{display: "flex", gap: 2, flexWrap: "wrap"}}>
@@ -33,6 +42,7 @@ function HomePage(): JSX.Element {
           </Box> ||
           <div>No processes</div>
         }
+        <Button variant="outlined" sx={{my: 1}} onClick={handleNewProcessFormOpen}>Create new process</Button>
       </Box>
       <Box sx={{mt: 2}}>
         <Typography variant="h5">New Sequence:</Typography>
