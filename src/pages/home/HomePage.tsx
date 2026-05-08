@@ -18,9 +18,12 @@ import CenteredModal from "../../components/CenteredModal"
 function HomePage(): JSX.Element {
   const [tasqUserData, dispatch] = useTasqUserData()
   const [newProcessFormOpen, setNewProcessFormOpen] = useState(false)
+  const [newSequenceFormOpen, setNewSequenceFormOpen] = useState(false)
 
   const handleNewProcessFormOpen = () => setNewProcessFormOpen(true)
   const handleNewProcessFormClose = () => setNewProcessFormOpen(false)
+  const handleNewSequenceFormOpen = () => setNewSequenceFormOpen(true)
+  const handleNewSequenceFormClose = () => setNewSequenceFormOpen(false)
 
   return (
     <>
@@ -33,6 +36,7 @@ function HomePage(): JSX.Element {
           handleNewProcessFormClose()
         }}/>
       </CenteredModal>
+
       <Box sx={{mt: 2}}>
         <Typography variant="h5">Processes:</Typography>
         {
@@ -44,12 +48,17 @@ function HomePage(): JSX.Element {
         }
         <Button variant="outlined" sx={{my: 1}} onClick={handleNewProcessFormOpen}>Create new process</Button>
       </Box>
+
+      <CenteredModal open={newSequenceFormOpen} onClose={handleNewSequenceFormClose}>
+        <Typography variant="h5" sx={{mb: 2}}>New Sequence</Typography>
+        <NewSequenceForm onCreate={(s: Sequence) => {
+          dispatch({ actionType: "NEW-SEQUENCE", payload: s})
+          handleNewSequenceFormClose()
+        }}/>
+      </CenteredModal>
+      
       <Box sx={{mt: 2}}>
-        <Typography variant="h5">New Sequence:</Typography>
-        <NewSequenceForm onCreate={(s: Sequence) => dispatch({ actionType: "NEW-SEQUENCE", payload: s})}/>
-      </Box>
-      <Box sx={{mt: 2}}>
-        <Typography variant="h5">Your Sequences:</Typography>
+        <Typography variant="h5">Sequences:</Typography>
         {
           Object.entries(tasqUserData.sequences).length &&
           <Box sx={{display: "flex", gap: 2, flexWrap: "wrap"}}>
@@ -57,6 +66,7 @@ function HomePage(): JSX.Element {
           </Box> ||
           <div>No sequences</div>
         }
+        <Button variant="outlined" sx={{my: 1}} onClick={handleNewSequenceFormOpen}>Create new sequence</Button>
       </Box>
     </>
   )
