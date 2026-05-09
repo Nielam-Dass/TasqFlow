@@ -12,8 +12,8 @@ import { Link } from "react-router"
  */
 function SequenceCard({ sequence }: { sequence: Sequence }) {
   return (
-    <Card variant="outlined" sx={{width: 400}}>
-      <CardActionArea component={Link} to={`/sequence/${sequence.sequenceId}`} >
+    <Card variant="outlined" sx={{ display: "flex", flexDirection: "column", width: 400 }}>
+      <CardActionArea component={Link} to={`/sequence/${sequence.sequenceId}`}  sx={{ flexGrow: 1 }}>
         <CardContent>
           <Typography variant="h5">{sequence.sequenceName}</Typography>
           <Typography>Number of tasks: {sequence.tasks.length}</Typography>

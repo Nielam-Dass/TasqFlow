@@ -15,8 +15,8 @@ import type { JSX } from "react"
 function ProcessCard({ process }: { process: Process }): JSX.Element {
   const [userData, _] = useTasqUserData()
   return (
-    <Card variant="outlined" sx={{ width: 360 }}>
-      <CardActionArea component={Link} to={`/process/${process.processId}`}>
+    <Card variant="outlined" sx={{ display: "flex", flexDirection: "column", width: 400 }}>
+      <CardActionArea component={Link} to={`/process/${process.processId}`} sx={{ flexGrow: 1 }}>
         <CardContent>
           <Typography variant="h5">{process.processName}</Typography>
           <Typography>Sequence: {userData.sequences[process.parentSequenceId].sequenceName}</Typography>
