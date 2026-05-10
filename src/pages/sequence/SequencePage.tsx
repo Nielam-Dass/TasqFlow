@@ -11,9 +11,16 @@ import { Button } from "@mui/material"
  */
 function SequencePage(): JSX.Element {
   const { seqId } = useParams<"seqId">() as { seqId: string }
-  const [tasqUserData, _] = useTasqUserData()
-
+  const [tasqUserData, dispatch] = useTasqUserData()
   const navigate = useNavigate()
+
+  const sequence = tasqUserData.sequences[seqId]
+  if (!sequence) return <></>
+
+  const handleDelete = (): void => {
+    dispatch({actionType: "DELETE-SEQUENCE", payload: seqId})
+    navigate("/")
+  }
 
   return (
     <>
@@ -27,6 +34,7 @@ function SequencePage(): JSX.Element {
           return <li key={t.taskId}>{t.taskName} {t.isOptional && "(Optional)"}</li>
         })}
       </ol>
+      <button onClick={handleDelete}>Delete</button>
     </>
   )
 }

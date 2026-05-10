@@ -107,6 +107,17 @@ const reducer = (state: UserData, action: Action): UserData => {
       else {
         throw new Error("DELETE-PROCESS actionType requires string payload with target processId")
       }
+    case "DELETE-SEQUENCE":
+      if (typeof action.payload === "string") {
+        return {
+          ...state,
+          sequences: Object.fromEntries(Object.entries(state.sequences).filter(([sid, _]): Boolean => sid !== action.payload)),
+          processes: Object.fromEntries(Object.entries(state.processes).filter(([_, p]): Boolean => p.parentSequenceId !== action.payload))
+        }
+      }
+      else {
+        throw new Error("DELETE-SEQUENCE actionType requires string payload with target sequenceId")
+      }
     default:
       return state
   }
