@@ -2,7 +2,7 @@ import type { JSX } from "react"
 import { useNavigate, useParams } from "react-router"
 import { useTasqUserData } from "../../components/TasqUserData"
 import type Task from "../../types/Task"
-import { Button } from "@mui/material"
+import { Box, Button, List, ListItem, Typography } from "@mui/material"
 
 /**
  * Component to display sequence of tasks
@@ -25,16 +25,17 @@ function SequencePage(): JSX.Element {
   return (
     <>
       <Button onClick={() => navigate("/")}>&lt;&lt; Back to dashboard</Button>
-      <h2>Sequence Details</h2>
-      <div>Sequence ID: {seqId}</div>
-      <div>Sequence Name: {tasqUserData.sequences[seqId].sequenceName}</div>
-      <div>Tasks:</div>
-      <ol>
-        {tasqUserData.sequences[seqId].tasks.map((t: Task) => {
-          return <li key={t.taskId}>{t.taskName} {t.isOptional && "(Optional)"}</li>
-        })}
-      </ol>
-      <button onClick={handleDelete}>Delete</button>
+      <Box sx={{my: 1}}>
+        <Typography variant="h3">Sequence Details: {sequence.sequenceName}</Typography>
+        <Typography variant="h6">Sequence ID: {seqId}</Typography>
+        <Typography variant="h6">Tasks:</Typography>
+        <List sx={{listStyle: "decimal", pl: 4}}>
+          {tasqUserData.sequences[seqId].tasks.map((t: Task) => {
+            return <ListItem key={t.taskId} sx={{display: "list-item"}}>{t.taskName} {t.isOptional && "(Optional)"}</ListItem>
+          })}
+        </List>
+      </Box>
+      <Button variant="outlined" color="error" onClick={handleDelete}>Delete</Button>
     </>
   )
 }
