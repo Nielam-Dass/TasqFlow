@@ -8,6 +8,7 @@ import { Box, Button, Typography } from "@mui/material"
 import ProcessCard from "./ProcessCard"
 import SequenceCard from "./SequenceCard"
 import CenteredModal from "../../components/CenteredModal"
+import AddIcon from "@mui/icons-material/Add"
 
 
 /**
@@ -46,7 +47,10 @@ function HomePage(): JSX.Element {
           </Box> ||
           <div>No processes</div>
         }
-        <Button variant="outlined" sx={{my: 1}} onClick={handleNewProcessFormOpen}>Create new process</Button>
+        <Button variant="outlined" sx={{my: 1}} onClick={handleNewProcessFormOpen}>
+          <AddIcon fontSize="small"/>
+          Create new process
+        </Button>
       </Box>
 
       <CenteredModal open={newSequenceFormOpen} onClose={handleNewSequenceFormClose}>
@@ -66,7 +70,10 @@ function HomePage(): JSX.Element {
           </Box> ||
           <div>No sequences</div>
         }
-        <Button variant="outlined" sx={{my: 1}} onClick={handleNewSequenceFormOpen}>Create new sequence</Button>
+        <Button variant="outlined" sx={{my: 1}} onClick={handleNewSequenceFormOpen}>
+          <AddIcon fontSize="small"/>
+          Create new sequence
+        </Button>
       </Box>
     </>
   )

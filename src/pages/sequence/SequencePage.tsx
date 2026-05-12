@@ -3,6 +3,8 @@ import { useNavigate, useParams } from "react-router"
 import { useTasqUserData } from "../../components/TasqUserData"
 import type Task from "../../types/Task"
 import { Box, Button, List, ListItem, Typography } from "@mui/material"
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
+
 
 /**
  * Component to display sequence of tasks
@@ -35,7 +37,10 @@ function SequencePage(): JSX.Element {
           })}
         </List>
       </Box>
-      <Button variant="outlined" color="error" onClick={handleDelete}>Delete</Button>
+      <Button variant="outlined" color="error" onClick={handleDelete}>
+        <DeleteOutlinedIcon fontSize="small"/>
+        Delete
+      </Button>
     </>
   )
 }

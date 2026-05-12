@@ -5,6 +5,8 @@ import type Process from "../../types/Process"
 import type Task from "../../types/Task"
 import { Box, Button, List, ListItem, Typography } from "@mui/material"
 import type Sequence from "../../types/Sequence"
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
+
 
 /**
  * Component to display process information
@@ -47,7 +49,10 @@ function ProcessPage(): JSX.Element {
         <Button variant="outlined" onClick={() => dispatch({actionType: "UPDATE-PROCESS", payload: {...process, currentTaskIndex: process.currentTaskIndex - 1}})}>Previous</Button>
         <Button variant="outlined" onClick={() => dispatch({actionType: "UPDATE-PROCESS", payload: {...process, currentTaskIndex: process.currentTaskIndex + 1}})}>Next</Button><br />
       </Box>
-      <Button variant="outlined" color="error" onClick={() => handleDelete(process.processId)}>Delete</Button>
+      <Button variant="outlined" color="error" onClick={() => handleDelete(process.processId)}>
+        <DeleteOutlinedIcon fontSize="small"/>
+        Delete
+      </Button>
     </>
   )
 }
